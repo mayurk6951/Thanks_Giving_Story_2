@@ -17,10 +17,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -45,12 +47,19 @@ public class ThanksGivingStory2ApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-	/*@Test
+
+	@Test
 	public void test_getObject() throws Exception{
 		ObjectFrame objf = new ObjectFrame();
 		when(objrepo.save(objf)).thenReturn(objf);
+		mocmvc.perform(MockMvcRequestBuilders.get("/object/generate/abc/Warrior"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andDo(print());
 
-//
-	}*/
+		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
+		verifyNoMoreInteractions(objrepo);
+
+	}
 
 }
