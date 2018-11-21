@@ -1,8 +1,10 @@
 package com.example.Thanks_Giving_Story2;
 
+import com.example.Thanks_Giving_Story2.Entity.Characterroom;
 import com.example.Thanks_Giving_Story2.Entity.ObjectFrame;
 import com.example.Thanks_Giving_Story2.Entity.Object_registry;
 import com.example.Thanks_Giving_Story2.Repository.ObjectRepository;
+import com.example.Thanks_Giving_Story2.Repository.RoomRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,8 @@ import org.springframework.integration.json.ObjectToJsonTransformer;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.isA;
@@ -38,6 +42,9 @@ public class ThanksGivingStory2ApplicationTests {
 
 	@MockBean
 	ObjectRepository objrepo;
+
+	@MockBean
+	RoomRepository roomrepo;
 
 	@Before
 	public void setup() {
@@ -62,4 +69,46 @@ public class ThanksGivingStory2ApplicationTests {
 
 	}
 
+
+	@Test
+	public void test_moveRoom() throws Exception{
+
+		Characterroom room  = new Characterroom();
+		room.setRoomid(4L);
+		int[] arr = new int[3];
+		arr[0]=1;
+		arr[1]=2;
+		arr[2] = 3;
+		room.setExits(arr);
+
+		ObjectFrame objf = new ObjectFrame();
+		objf.setId(1L);
+		objf.setLocation(4);
+
+
+		when(objrepo.findById(1L))
+				.thenReturn(Optional.of(objf));
+		when(roomrepo.findById(4L)).thenReturn(Optional.of(room));
+
+		mocmvc.perform(MockMvcRequestBuilders.post("movecharacter/1/to/5")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk());
+
+		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
+
+	}
+
+	@Test
+	public void test_pickupitem() throws Exception {
+		ObjectFrame objf = new ObjectFrame();
+		when(objrepo.save(objf)).thenReturn(objf);
+		mocmvc.perform(MockMvcRequestBuilders.post("/inventory/pickup/1/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andDo(print());
+
+		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
+
+	}
 }

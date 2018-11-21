@@ -5,12 +5,12 @@ package com.example.Thanks_Giving_Story2.Entity;
 
 import org.springframework.data.util.Pair;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import java.security.Key;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,8 +24,6 @@ public class ObjectFrame {
 
     private String name;
     private String Klass;
-
-   // private Pair<String, String> nameclass ;
     private long obj_int;
     private long wis;
     private long cha;
@@ -33,15 +31,15 @@ public class ObjectFrame {
     private long dex;
     private long con;
     private long location;
-    private String [] inventory;
+    @ElementCollection
+    private Map<Long,String> inventory;
     private long hitpoints;
 
 
 
     public ObjectFrame(){};
 
-    public ObjectFrame(long id, String name, String klass, long obj_int, long wis, long cha, long str, long dex, long con, long location, String[] inventory, long hitpoints) {
-
+    public ObjectFrame(long id, String name, String klass, long obj_int, long wis, long cha, long str, long dex, long con, long location, Map<Long, String> inventory, long hitpoints) {
         this.id = id;
         this.name = name;
         Klass = klass;
@@ -54,6 +52,14 @@ public class ObjectFrame {
         this.location = location;
         this.inventory = inventory;
         this.hitpoints = hitpoints;
+    }
+
+    public Map<Long, String> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Map<Long, String> inventory) {
+        this.inventory = inventory;
     }
 
     public String getName() {
@@ -135,14 +141,6 @@ public class ObjectFrame {
 
     public void setLocation(long location) {
         this.location = location;
-    }
-
-    public String[] getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(String[] inventory) {
-        this.inventory = inventory;
     }
 
     public long getHitpoints() {

@@ -1,8 +1,10 @@
 package com.example.Thanks_Giving_Story2.Controller;
 
+import com.example.Thanks_Giving_Story2.Entity.Item;
 import com.example.Thanks_Giving_Story2.Entity.ObjectFrame;
 import com.example.Thanks_Giving_Story2.Entity.Object_registry;
 import com.example.Thanks_Giving_Story2.Repository.ObjectRepository;
+import com.example.Thanks_Giving_Story2.Repository.RoomRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class ObjectController {
     @Autowired
     ObjectRepository repo;
 
+    @Autowired
+    RoomRepository roomrepo;
+
     @GetMapping("/object/generate/{name}/{Klass}")
     public ResponseEntity<ObjectFrame> getobject(@PathVariable String name, @PathVariable String Klass) throws JsonProcessingException {
         Object_registry objreg= new Object_registry();
@@ -38,7 +43,6 @@ public class ObjectController {
         ObjectFrame obj = new ObjectFrame();
         obj.setKlass(Klass);
         obj.setName(name);
-        obj.setInventory(new String[0]);
         obj.setCon(this.randomvalues.get(1));
         obj.setHitpoints(2*obj.getCon());
         obj.setLocation(4);
