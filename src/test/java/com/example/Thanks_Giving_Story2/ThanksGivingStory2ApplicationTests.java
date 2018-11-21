@@ -56,7 +56,7 @@ public class ThanksGivingStory2ApplicationTests {
 	}
 
 	@Test
-	public void test_getObject() throws Exception{
+	public void test_getObject() throws Exception {
 		ObjectFrame objf = new ObjectFrame();
 		when(objrepo.save(objf)).thenReturn(objf);
 		mocmvc.perform(MockMvcRequestBuilders.get("/object/generate/abc/Warrior"))
@@ -71,13 +71,13 @@ public class ThanksGivingStory2ApplicationTests {
 
 
 	@Test
-	public void test_moveRoom() throws Exception{
+	public void test_moveRoom() throws Exception {
 
-		Characterroom room  = new Characterroom();
+		Characterroom room = new Characterroom();
 		room.setRoomid(4L);
 		int[] arr = new int[3];
-		arr[0]=1;
-		arr[1]=2;
+		arr[0] = 1;
+		arr[1] = 2;
 		arr[2] = 3;
 		room.setExits(arr);
 
@@ -92,7 +92,7 @@ public class ThanksGivingStory2ApplicationTests {
 
 		mocmvc.perform(MockMvcRequestBuilders.post("movecharacter/1/to/5")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk());
+				.andExpect(status().isOk());
 
 		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
 
@@ -103,6 +103,20 @@ public class ThanksGivingStory2ApplicationTests {
 		ObjectFrame objf = new ObjectFrame();
 		when(objrepo.save(objf)).thenReturn(objf);
 		mocmvc.perform(MockMvcRequestBuilders.post("/inventory/pickup/1/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andDo(print());
+
+		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
+
+	}
+
+	@Test
+	public void test_dropitem() throws Exception {
+		ObjectFrame objf = new ObjectFrame();
+		when(objrepo.save(objf)).thenReturn(objf);
+		mocmvc.perform(MockMvcRequestBuilders.post("/inventory/drop/1/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
