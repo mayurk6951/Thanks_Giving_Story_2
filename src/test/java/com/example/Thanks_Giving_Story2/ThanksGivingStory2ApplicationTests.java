@@ -125,4 +125,24 @@ public class ThanksGivingStory2ApplicationTests {
 		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
 
 	}
+
+	@Test
+	public void test_attack() throws Exception{
+		ObjectFrame obj1 = new ObjectFrame();
+		ObjectFrame obj2 = new ObjectFrame();
+		obj1.setId(1L);
+		obj1.setHitpoints(10);
+		obj2.setId(2L);
+		obj2.setHitpoints(15);
+		when(objrepo.findById(1L))
+				.thenReturn(Optional.of(obj1));
+		when(objrepo.findById(2L))
+				.thenReturn(Optional.of(obj2));
+		mocmvc.perform(MockMvcRequestBuilders.post("/battle/1/2")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+		verify(objrepo, times(1)).save(isA(ObjectFrame.class));
+
+	}
 }
